@@ -1,0 +1,1172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CodePilot AI | Code Intelligence</title>
+
+    <style>
+        :root {
+            --bg: #0b1020;
+            --panel: #121a2b;
+            --panel-light: #19243a;
+            --input-bg: #0b1220;
+            --border: #29364d;
+            --text: #edf2ff;
+            --muted: #91a0b8;
+            --primary: #6485ff;
+            --primary-hover: #7895ff;
+            --success: #39c99a;
+            --success-bg: #12332d;
+            --danger: #ff7272;
+            --danger-bg: #381d29;
+            --info: #a8baff;
+            --info-bg: #202e50;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", sans-serif;
+        }
+
+        header {
+            min-height: 72px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .logo {
+            background: var(--primary);
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+        }
+
+        .connection {
+            color: var(--success);
+            font-size: 13px;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 55px auto;
+            padding: 0 22px;
+        }
+
+        .hero {
+            margin-bottom: 32px;
+        }
+
+        .eyebrow {
+            color: #91aaff;
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 46px);
+            margin: 12px 0;
+            letter-spacing: -1.5px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .tag {
+            color: #a8baff;
+            background: #202e50;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        label {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+            margin: 15px 0 8px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 9px;
+            padding: 13px 14px;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary);
+        }
+
+        input:disabled {
+            opacity: 0.85;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            min-height: 105px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 19px;
+            background: var(--primary);
+            color: white;
+            font-weight: 650;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 18px;
+            transition: background 0.2s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .status {
+            display: none;
+            margin-top: 16px;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .status.success {
+            display: block;
+            color: var(--success);
+            background: var(--success-bg);
+        }
+
+        .status.error {
+            display: block;
+            color: var(--danger);
+            background: var(--danger-bg);
+        }
+
+        .status.info {
+            display: block;
+            color: var(--info);
+            background: var(--info-bg);
+        }
+
+        .answer {
+            display: none;
+            margin-top: 25px;
+            border-top: 1px solid var(--border);
+            padding-top: 22px;
+        }
+
+        .answer h3 {
+            font-size: 16px;
+            margin: 22px 0 14px;
+        }
+
+        .answer-text {
+            color: #dbe5f8;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .answer-text h2,
+        .answer-text h3,
+        .answer-text h4 {
+            color: #a8baff;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .answer-text h2 {
+            font-size: 20px;
+        }
+
+        .answer-text h3 {
+            font-size: 17px;
+        }
+
+        .answer-text h4 {
+            font-size: 15px;
+        }
+
+        .answer-text p {
+            margin: 10px 0;
+        }
+
+        .answer-text ul,
+        .answer-text ol {
+            padding-left: 25px;
+            line-height: 1.9;
+        }
+
+        .answer-text li {
+            margin: 4px 0;
+        }
+
+        .answer-text code {
+            background: #26344d;
+            color: #a8baff;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .answer-text strong {
+            color: #ffffff;
+        }
+
+        .answer-text pre {
+            overflow-x: auto;
+            background: #0b1220;
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .answer-text pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .source {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 14px;
+            margin-top: 10px;
+        }
+
+        .source-title {
+            color: #a8baff;
+            font-size: 13px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .source-meta {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 7px;
+            line-height: 1.6;
+        }
+
+        .metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .metric {
+            background: var(--panel-light);
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            min-width: 100px;
+        }
+
+        .metric strong {
+            display: block;
+            color: var(--text);
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 25px;
+        }
+
+        @media (max-width: 650px) {
+            main {
+                margin-top: 30px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            header {
+                padding: 0 20px;
+            }
+
+            .panel-heading {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <div class="logo">⌘</div>
+        <span>CodePilot AI</span>
+    </div>
+
+    <div id="connectionStatus" class="connection">
+        ● Checking API...
+    </div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="eyebrow">AI-powered code intelligence</div>
+
+        <h1>Understand your codebase.</h1>
+
+        <p class="subtitle">
+            Index your source code, ask questions in natural language,
+            and get answers grounded in your actual implementation.
+        </p>
+    </section>
+
+    <!-- REPOSITORY INDEXING -->
+
+    <section class="panel">
+
+        <div class="panel-heading">
+            <h2>01 / Repository indexing</h2>
+            <span class="tag">CHROMADB + EMBEDDINGS</span>
+        </div>
+
+        <label for="repositoryPath">
+            Local repository path
+        </label>
+
+        <input
+            id="repositoryPath"
+            type="text"
+            placeholder="/Users/developer/projects/my-app"
+        >
+
+        <div class="row">
+
+            <div>
+                <label for="repositoryId">
+                    Repository ID
+                </label>
+
+                <input
+                    id="repositoryId"
+                    type="text"
+                    placeholder="my-app"
+                >
+            </div>
+
+            <div>
+                <label for="indexingEngine">
+                    Indexing engine
+                </label>
+
+                <input
+                    id="indexingEngine"
+                    value="CodePilot RAG Pipeline"
+                    disabled
+                >
+            </div>
+
+        </div>
+
+        <button
+            id="indexButton"
+            onclick="indexRepository()"
+        >
+            Index repository →
+        </button>
+
+        <div id="indexStatus" class="status"></div>
+
+    </section>
+
+    <!-- QUESTION ANSWERING -->
+
+    <section class="panel">
+
+        <div class="panel-heading">
+            <h2>02 / Ask your codebase</h2>
+            <span class="tag">CLAUDE AI</span>
+        </div>
+
+        <label for="questionRepositoryId">
+            Repository ID
+        </label>
+
+        <input
+            id="questionRepositoryId"
+            type="text"
+            placeholder="my-app"
+        >
+
+        <label for="question">
+            What would you like to understand?
+        </label>
+
+        <textarea
+            id="question"
+            placeholder="Example: Where is authentication implemented? Explain the main functions..."
+        ></textarea>
+
+        <div class="row">
+
+            <div>
+                <label for="topK">
+                    Retrieved code chunks
+                </label>
+
+                <input
+                    id="topK"
+                    type="number"
+                    min="1"
+                    max="20"
+                    value="5"
+                >
+            </div>
+
+            <div style="display:flex;align-items:end">
+
+                <button
+                    id="askButton"
+                    onclick="askQuestion()"
+                    style="width:100%"
+                >
+                    Ask CodePilot →
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="questionStatus" class="status"></div>
+
+        <!-- ANSWER OUTPUT -->
+
+        <div id="answer" class="answer">
+
+            <h3>AI-generated answer</h3>
+
+            <div
+                id="answerText"
+                class="answer-text"
+            ></div>
+
+            <h3>Source references</h3>
+
+            <div id="sources"></div>
+
+            <h3>Execution metrics</h3>
+
+            <div id="metrics" class="metrics"></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    CodePilot AI · Understand code. Find answers. Ship faster.
+</footer>
+
+
+<script>
+
+    // ========================================================
+    // MARKDOWN RENDERER
+    // ========================================================
+
+    /**
+     * Escape HTML characters before displaying generated content.
+     *
+     * This prevents repository content and LLM responses from
+     * being interpreted as executable HTML.
+     */
+    function escapeHTML(value) {
+
+        return value.replace(/[&<>"']/g, char => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[char]);
+
+    }
+
+
+    /**
+     * Convert supported Markdown syntax into safe HTML.
+     *
+     * Supports:
+     * - Headings
+     * - Bold text
+     * - Inline code
+     * - Bullet lists
+     * - Numbered lists
+     * - Paragraphs
+     *
+     * Unsupported Markdown is displayed as plain text.
+     */
+    function renderMarkdown(markdown) {
+
+        const lines = markdown.split("\n");
+
+        let html = "";
+        let listType = null;
+
+        function closeList() {
+
+            if (listType) {
+                html += `</${listType}>`;
+                listType = null;
+            }
+
+        }
+
+        for (const line of lines) {
+
+            const trimmed = line.trim();
+
+            if (!trimmed) {
+                closeList();
+                continue;
+            }
+
+            let content = escapeHTML(trimmed);
+
+            // Inline code.
+            content = content.replace(
+                /`([^`]+)`/g,
+                "<code>$1</code>"
+            );
+
+            // Bold text.
+            content = content.replace(
+                /\*\*(.+?)\*\*/g,
+                "<strong>$1</strong>"
+            );
+
+            // Headings.
+            if (trimmed.startsWith("### ")) {
+
+                closeList();
+
+                html += `<h4>${content.slice(4)}</h4>`;
+
+            } else if (trimmed.startsWith("## ")) {
+
+                closeList();
+
+                html += `<h3>${content.slice(3)}</h3>`;
+
+            } else if (trimmed.startsWith("# ")) {
+
+                closeList();
+
+                html += `<h2>${content.slice(2)}</h2>`;
+
+            }
+
+            // Unordered lists.
+            else if (trimmed.startsWith("- ") ||
+                     trimmed.startsWith("* ")) {
+
+                if (listType !== "ul") {
+
+                    closeList();
+
+                    html += "<ul>";
+                    listType = "ul";
+
+                }
+
+                html += `<li>${content.slice(2)}</li>`;
+
+            }
+
+            // Numbered lists.
+            else if (/^\d+\.\s/.test(trimmed)) {
+
+                if (listType !== "ol") {
+
+                    closeList();
+
+                    html += "<ol>";
+                    listType = "ol";
+
+                }
+
+                html += `<li>${content.replace(/^\d+\.\s/, "")}</li>`;
+
+            }
+
+            // Normal paragraphs.
+            else {
+
+                closeList();
+
+                html += `<p>${content}</p>`;
+
+            }
+
+        }
+
+        closeList();
+
+        return html;
+
+    }
+
+
+    // ========================================================
+    // UI HELPERS
+    // ========================================================
+
+    /**
+     * Display an operation status.
+     */
+    function showStatus(elementId, message, type) {
+
+        const element = document.getElementById(elementId);
+
+        element.textContent = message;
+        element.className = `status ${type}`;
+
+    }
+
+
+    /**
+     * Manage button loading state.
+     */
+    function setLoading(buttonId, loading, label) {
+
+        const button = document.getElementById(buttonId);
+
+        button.disabled = loading;
+
+        button.textContent = loading
+            ? "Processing..."
+            : label;
+
+    }
+
+
+    // ========================================================
+    // REPOSITORY INDEXING
+    // ========================================================
+
+    /**
+     * Index a local repository through the FastAPI endpoint.
+     *
+     * The backend reads the filesystem path and runs the
+     * ingestion, parsing, chunking, embedding and storage pipeline.
+     */
+    async function indexRepository() {
+
+        const repositoryPath = document
+            .getElementById("repositoryPath")
+            .value.trim();
+
+        const repositoryId = document
+            .getElementById("repositoryId")
+            .value.trim();
+
+        if (!repositoryPath || !repositoryId) {
+
+            showStatus(
+                "indexStatus",
+                "Please enter both repository path and repository ID.",
+                "error"
+            );
+
+            return;
+
+        }
+
+        setLoading(
+            "indexButton",
+            true,
+            "Index repository →"
+        );
+
+        showStatus(
+            "indexStatus",
+            "Indexing repository. Please wait...",
+            "info"
+        );
+
+        try {
+
+            const response = await fetch(
+                "/api/v1/repositories/index",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        repository_path: repositoryPath,
+                        repository_id: repositoryId
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail || "Repository indexing failed."
+                );
+
+            }
+
+            // Populate repository ID for question answering.
+            document.getElementById(
+                "questionRepositoryId"
+            ).value = repositoryId;
+
+            showStatus(
+                "indexStatus",
+                `Repository indexed successfully!\n` +
+                `Files discovered: ${data.total_files}\n` +
+                `Files parsed: ${data.parsed_files}\n` +
+                `Code units: ${data.total_code_units}\n` +
+                `Chunks generated: ${data.total_chunks}\n` +
+                `Chunks indexed: ${data.indexed_chunks}\n` +
+                `Status: ${data.status}`,
+                "success"
+            );
+
+        } catch (error) {
+
+            showStatus(
+                "indexStatus",
+                error.message,
+                "error"
+            );
+
+        } finally {
+
+            setLoading(
+                "indexButton",
+                false,
+                "Index repository →"
+            );
+
+        }
+
+    }
+
+
+    // ========================================================
+    // QUESTION ANSWERING
+    // ========================================================
+
+    /**
+     * Ask a natural-language question about an indexed repository.
+     *
+     * Calls the existing QuestionAnsweringService through FastAPI.
+     * Displays the generated answer, citations and execution metrics.
+     */
+    async function askQuestion() {
+
+        const repositoryId = document
+            .getElementById("questionRepositoryId")
+            .value.trim();
+
+        const question = document
+            .getElementById("question")
+            .value.trim();
+
+        const topK = Number(
+            document.getElementById("topK").value
+        );
+
+        if (!repositoryId || !question) {
+
+            showStatus(
+                "questionStatus",
+                "Please enter a repository ID and a question.",
+                "error"
+            );
+
+            return;
+
+        }
+
+        if (!Number.isInteger(topK) || topK < 1 || topK > 20) {
+
+            showStatus(
+                "questionStatus",
+                "Retrieved code chunks must be between 1 and 20.",
+                "error"
+            );
+
+            return;
+
+        }
+
+        setLoading(
+            "askButton",
+            true,
+            "Ask CodePilot →"
+        );
+
+        showStatus(
+            "questionStatus",
+            "Searching your codebase and generating an answer...",
+            "info"
+        );
+
+        document.getElementById("answer").style.display = "none";
+
+        try {
+
+            const response = await fetch(
+                `/api/v1/repositories/${encodeURIComponent(repositoryId)}/ask`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        question: question,
+                        top_k: topK
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail || "Unable to answer this question."
+                );
+
+            }
+
+            // Render the AI-generated Markdown safely.
+            document.getElementById("answerText").innerHTML =
+                renderMarkdown(data.answer || "");
+
+            // Render source references.
+            renderSources(data.sources || []);
+
+            // Render execution metrics.
+            renderMetrics(data);
+
+            document.getElementById(
+                "answer"
+            ).style.display = "block";
+
+            showStatus(
+                "questionStatus",
+                "Answer generated successfully.",
+                "success"
+            );
+
+        } catch (error) {
+
+            showStatus(
+                "questionStatus",
+                error.message,
+                "error"
+            );
+
+        } finally {
+
+            setLoading(
+                "askButton",
+                false,
+                "Ask CodePilot →"
+            );
+
+        }
+
+    }
+
+
+    // ========================================================
+    // SOURCE REFERENCES
+    // ========================================================
+
+    /**
+     * Render source citations returned by the RAG pipeline.
+     *
+     * Uses textContent instead of injecting repository metadata
+     * as HTML.
+     */
+    function renderSources(sources) {
+
+        const container = document.getElementById("sources");
+
+        container.replaceChildren();
+
+        if (!sources.length) {
+
+            const empty = document.createElement("p");
+
+            empty.textContent = "No source references returned.";
+
+            empty.className = "source-meta";
+
+            container.appendChild(empty);
+
+            return;
+
+        }
+
+        sources.forEach(source => {
+
+            const card = document.createElement("div");
+
+            card.className = "source";
+
+            const title = document.createElement("div");
+
+            title.className = "source-title";
+
+            title.textContent =
+                `[${source.source_id}] ${source.file_path}`;
+
+            const meta = document.createElement("div");
+
+            meta.className = "source-meta";
+
+            const symbol = source.symbol_name || "Code block";
+
+            const lines =
+                source.start_line != null &&
+                source.end_line != null
+                    ? `Lines ${source.start_line}–${source.end_line}`
+                    : "Line numbers unavailable";
+
+            const distance =
+                source.distance != null
+                    ? ` · Cosine distance: ${Number(source.distance).toFixed(3)}`
+                    : "";
+
+            meta.textContent =
+                `${symbol} · ${lines} · ${source.language || "Unknown"}${distance}`;
+
+            card.append(title, meta);
+
+            container.appendChild(card);
+
+        });
+
+    }
+
+
+    // ========================================================
+    // EXECUTION METRICS
+    // ========================================================
+
+    /**
+     * Display model token usage and pipeline timings.
+     */
+    function renderMetrics(data) {
+
+        const container = document.getElementById("metrics");
+
+        container.replaceChildren();
+
+        const items = [
+
+            [
+                "Input tokens",
+                data.usage?.input_tokens ?? 0
+            ],
+
+            [
+                "Output tokens",
+                data.usage?.output_tokens ?? 0
+            ],
+
+            [
+                "Sources",
+                data.context_source_count ?? 0
+            ],
+
+            [
+                "Total time",
+                `${Number(data.timing_ms?.total ?? 0).toFixed(0)} ms`
+            ]
+
+        ];
+
+        items.forEach(([label, value]) => {
+
+            const metric = document.createElement("div");
+
+            metric.className = "metric";
+
+            const name = document.createElement("span");
+
+            name.textContent = label;
+
+            const number = document.createElement("strong");
+
+            number.textContent = value;
+
+            metric.append(name, number);
+
+            container.appendChild(metric);
+
+        });
+
+    }
+
+
+    // ========================================================
+    // APPLICATION HEALTH
+    // ========================================================
+
+    /**
+     * Check FastAPI application health when the page loads.
+     */
+    async function checkHealth() {
+
+        const indicator = document.getElementById(
+            "connectionStatus"
+        );
+
+        try {
+
+            const response = await fetch("/health");
+
+            if (!response.ok) {
+
+                throw new Error("Health check failed");
+
+            }
+
+            const data = await response.json();
+
+            indicator.textContent =
+                `● ${data.status === "healthy" ? "API connected" : "API unhealthy"}`;
+
+            indicator.style.color =
+                data.status === "healthy"
+                    ? "var(--success)"
+                    : "var(--danger)";
+
+        } catch {
+
+            indicator.textContent = "● API unavailable";
+
+            indicator.style.color = "var(--danger)";
+
+        }
+
+    }
+
+
+    // ========================================================
+    // INITIALIZATION
+    // ========================================================
+
+    /**
+     * Initialize the frontend.
+     */
+    document.addEventListener("DOMContentLoaded", () => {
+
+        checkHealth();
+
+    });
+
+</script>
+
+</body>
+</html>
