@@ -445,19 +445,15 @@ The retrival consistency needs to be improved
 
 ### Application
 
-CodePilot AI application
+![CodePilot AI Application](docs/screenshots/Application.png)
 
-docs/screenshots/Application.png
+### Repository Indexing
 
-### Repository indexing
+![Repository Indexing](docs/screenshots/Indexing.png)
 
-Repository indexing
-docs/screenshots/Indexing.png
+### Question Answering and Citations
 
-### Question answering and citations
-
-Question answering
-docs/screenshots/Answers.png
+![Question Answering and Citations](docs/screenshots/Answers.png)
 
 ## 10. Current limitations
 
