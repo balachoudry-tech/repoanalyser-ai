@@ -131,9 +131,7 @@ The response includes the generated answer, source metadata, model usage and exe
 pytest -q
 ```
 
-Tests use injected/fake dependencies where appropriate.
-
----
+## Tests use injected/fake dependencies.
 
 ## 2. Architecture overview
 
@@ -179,7 +177,7 @@ Tests use injected/fake dependencies where appropriate.
 
 The current application is designed as a local MVP. Production deployment would require changes in security, storage, workload execution, scaling, reliability and operations.
 
-### 3.1 Production Improvements
+### Production Improvements
 
 1. Package the API and indexing workers using Docker. Deploy on AWS ECS Fargate,
 2. Move repository indexing to background workers using Amazon SQS.
@@ -275,7 +273,7 @@ Implemented safeguards include:
 
 ## 5. Engineering standards followed and skipped
 
-### Followed in the MVP
+### Followed
 
 - Separation of concerns across API, ingestion, parsing, indexing, retrieval and LLM modules.
 - Dependency injection for service collaborators and test doubles.
@@ -337,8 +335,10 @@ I would prioritize improvements in this order:
 6. **Containerize and automate delivery.** Add Docker, CI checks and a repeatable cloud deployment.
 7. **Improve operational observability.** Add distributed tracing, structured metrics, cost tracking and dashboards.
 8. **Evaluate alternatives empirically.** Compare code-focused embedding models, vector stores and LLM providers using the same evaluation questions rather than choosing based only on assumptions.
+9. **Enabling more languages.** Extend parser to check more languages.
+10. **Enabling repo access from github.**b The current implementation parses only the local repo, this can be extended to the parse public/private repos of github
 
-The retrival consistency needs to be improved
+The retrival consistency needs to be improved using ranking
 
 ---
 
